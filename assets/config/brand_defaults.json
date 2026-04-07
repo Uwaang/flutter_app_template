@@ -1,0 +1,7 @@
+{
+  "appName": "Template App",
+  "brandName": "Template Brand",
+  "applicationId": "com.example.template.app",
+  "apiBaseUrl": "https://api.example.com",
+  "supportedPlatforms": ["android", "web", "linux", "windows"]
+}

@@ -1,0 +1,14 @@
+services:
+  flutter:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+      - flutter_pub_cache:/root/.pub-cache
+    stdin_open: true
+    tty: true
+
+volumes:
+  flutter_pub_cache:

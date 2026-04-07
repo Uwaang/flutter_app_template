@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Verify generated code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Ensure generated files are committed
+        run: git diff --exit-code
+
+      - name: Build web smoke test
+        run: >
+          flutter build web --release
+          --dart-define=APP_ENV=ci
+          --dart-define=APP_NAME=Template App
+          --dart-define=BRAND_NAME=Template Brand
+          --dart-define=APPLICATION_ID=com.example.template.app
+          --dart-define=API_BASE_URL=https://api.example.com

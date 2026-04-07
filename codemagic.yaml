@@ -1,0 +1,163 @@
+workflows:
+  android_dev:
+    name: Android Dev
+    max_build_duration: 120
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      vars:
+        APP_ENV: dev
+        APP_NAME: Template App
+        BRAND_NAME: Template Brand
+        APPLICATION_ID: com.example.template.app
+        API_BASE_URL: https://api.example.com
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Build APK
+        script: >
+          flutter build apk --debug
+          --dart-define=APP_ENV=$APP_ENV
+          --dart-define=APP_NAME="$APP_NAME"
+          --dart-define=BRAND_NAME="$BRAND_NAME"
+          --dart-define=APPLICATION_ID=$APPLICATION_ID
+          --dart-define=API_BASE_URL=$API_BASE_URL
+    artifacts:
+      - build/**/outputs/**/*.apk
+
+  android_prod:
+    name: Android Prod
+    max_build_duration: 120
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      vars:
+        APP_ENV: prod
+        APP_NAME: Template App
+        BRAND_NAME: Template Brand
+        APPLICATION_ID: com.example.template.app
+        API_BASE_URL: https://api.example.com
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*.*.*'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Build App Bundle
+        script: >
+          flutter build appbundle --release
+          --dart-define=APP_ENV=$APP_ENV
+          --dart-define=APP_NAME="$APP_NAME"
+          --dart-define=BRAND_NAME="$BRAND_NAME"
+          --dart-define=APPLICATION_ID=$APPLICATION_ID
+          --dart-define=API_BASE_URL=$API_BASE_URL
+    artifacts:
+      - build/**/outputs/**/*.aab
+
+  web_prod:
+    name: Web Prod
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      vars:
+        APP_ENV: prod
+        APP_NAME: Template App
+        BRAND_NAME: Template Brand
+        APPLICATION_ID: com.example.template.app
+        API_BASE_URL: https://api.example.com
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*.*.*'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Build web
+        script: >
+          flutter build web --release
+          --dart-define=APP_ENV=$APP_ENV
+          --dart-define=APP_NAME="$APP_NAME"
+          --dart-define=BRAND_NAME="$BRAND_NAME"
+          --dart-define=APPLICATION_ID=$APPLICATION_ID
+          --dart-define=API_BASE_URL=$API_BASE_URL
+    artifacts:
+      - build/web/**
+
+  linux_prod:
+    name: Linux Prod
+    max_build_duration: 90
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      vars:
+        APP_ENV: prod
+        APP_NAME: Template App
+        BRAND_NAME: Template Brand
+        APPLICATION_ID: com.example.template.app
+        API_BASE_URL: https://api.example.com
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*.*.*'
+          include: true
+    scripts:
+      - name: Enable Linux desktop
+        script: flutter config --enable-linux-desktop
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Build Linux bundle
+        script: >
+          flutter build linux --release
+          --dart-define=APP_ENV=$APP_ENV
+          --dart-define=APP_NAME="$APP_NAME"
+          --dart-define=BRAND_NAME="$BRAND_NAME"
+          --dart-define=APPLICATION_ID=$APPLICATION_ID
+          --dart-define=API_BASE_URL=$API_BASE_URL
+    artifacts:
+      - build/linux/x64/release/bundle/**
+
+  windows_prod:
+    name: Windows Prod
+    max_build_duration: 120
+    instance_type: windows_x2
+    environment:
+      flutter: stable
+      vars:
+        APP_ENV: prod
+        APP_NAME: Template App
+        BRAND_NAME: Template Brand
+        APPLICATION_ID: com.example.template.app
+        API_BASE_URL: https://api.example.com
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*.*.*'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Build Windows
+        script: >
+          flutter build windows --release
+          --dart-define=APP_ENV=%APP_ENV%
+          --dart-define=APP_NAME="%APP_NAME%"
+          --dart-define=BRAND_NAME="%BRAND_NAME%"
+          --dart-define=APPLICATION_ID=%APPLICATION_ID%
+          --dart-define=API_BASE_URL=%API_BASE_URL%
+    artifacts:
+      - build/windows/x64/runner/Release/**

@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+
+abstract final class AppTheme {
+  static ThemeData buildTheme() {
+    const seedColor = Color(0xFF0F766E);
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: seedColor,
+      brightness: Brightness.light,
+    );
+
+    return ThemeData(
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: const Color(0xFFF4F1EA),
+      useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
+        elevation: 0,
+      ),
+      cardTheme: CardThemeData(
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(color: colorScheme.outlineVariant),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: colorScheme.secondaryContainer,
+        disabledColor: colorScheme.surfaceContainerHighest,
+        selectedColor: colorScheme.primaryContainer,
+        secondarySelectedColor: colorScheme.secondaryContainer,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        labelStyle: TextStyle(color: colorScheme.onSecondaryContainer),
+        secondaryLabelStyle: TextStyle(color: colorScheme.onPrimaryContainer),
+        brightness: Brightness.light,
+      ),
+    );
+  }
+}
