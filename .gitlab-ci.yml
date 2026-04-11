@@ -12,18 +12,9 @@ variables:
 
 default:
   tags:
-    - nas
-    - shell
+    - docker
+    - ct102
     - local
-
-pipeline_sanity:
-  stage: verify
-  rules:
-    - if: '$CI_COMMIT_MESSAGE =~ /\[skip ci\]/i'
-      when: never
-    - when: on_success
-  script:
-    - 'echo "pipeline sanity check: ${CI_PIPELINE_SOURCE} ${CI_COMMIT_REF_NAME}"'
 
 verify_template:
   stage: verify
