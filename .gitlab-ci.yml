@@ -11,10 +11,14 @@ variables:
   API_BASE_URL: https://api.example.com
 
 default:
+  image: ghcr.io/cirruslabs/flutter:stable
   tags:
     - docker
     - ct102
     - local
+  before_script:
+    - flutter --version
+    - flutter pub get
 
 verify_template:
   stage: verify
@@ -27,22 +31,12 @@ verify_template:
       when: on_success
     - when: never
   script:
-    - 'set -euo pipefail'
-    - 'docker compose build'
-    - 'docker compose run --rm flutter bash -lc "flutter pub get"'
-    - 'docker compose run --rm flutter bash -lc "dart format --output=none --set-exit-if-changed ."'
-    - 'docker compose run --rm flutter bash -lc "flutter analyze"'
-    - 'docker compose run --rm flutter bash -lc "flutter test"'
-    - 'docker compose run --rm flutter bash -lc "dart run build_runner build --delete-conflicting-outputs"'
-    - 'git diff --exit-code'
-    - >
-      docker compose run --rm flutter bash -lc
-      "flutter build web --release
-      --dart-define=APP_ENV=${APP_ENV}
-      --dart-define=APP_NAME='${APP_NAME}'
-      --dart-define=BRAND_NAME='${BRAND_NAME}'
-      --dart-define=APPLICATION_ID=${APPLICATION_ID}
-      --dart-define=API_BASE_URL=${API_BASE_URL}"
+    - dart format --output=none --set-exit-if-changed .
+    - flutter analyze
+    - flutter test
+    - dart run build_runner build --delete-conflicting-outputs
+    - git diff --exit-code
+    - flutter build web --release --dart-define=APP_ENV="${APP_ENV}" --dart-define=APP_NAME="${APP_NAME}" --dart-define=BRAND_NAME="${BRAND_NAME}" --dart-define=APPLICATION_ID="${APPLICATION_ID}" --dart-define=API_BASE_URL="${API_BASE_URL}"
 
 build_web_artifact:
   stage: build
@@ -53,17 +47,7 @@ build_web_artifact:
       when: on_success
     - when: never
   script:
-    - 'set -euo pipefail'
-    - 'docker compose build'
-    - 'docker compose run --rm flutter bash -lc "flutter pub get"'
-    - >
-      docker compose run --rm flutter bash -lc
-      "flutter build web --release
-      --dart-define=APP_ENV=prod
-      --dart-define=APP_NAME='${APP_NAME}'
-      --dart-define=BRAND_NAME='${BRAND_NAME}'
-      --dart-define=APPLICATION_ID=${APPLICATION_ID}
-      --dart-define=API_BASE_URL=${API_BASE_URL}"
+    - flutter build web --release --dart-define=APP_ENV=prod --dart-define=APP_NAME="${APP_NAME}" --dart-define=BRAND_NAME="${BRAND_NAME}" --dart-define=APPLICATION_ID="${APPLICATION_ID}" --dart-define=API_BASE_URL="${API_BASE_URL}"
   artifacts:
     when: always
     expire_in: 7 days
