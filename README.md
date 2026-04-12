@@ -1,18 +1,34 @@
 # flutter_app_template
 
-`flutter_app_template` is a Docker-first Flutter boilerplate for the `one app per repo` workflow. It targets Android, Web, Linux, and Windows from a single template repository and keeps the host machine requirement intentionally small: `git + docker + editor`.
+`flutter_app_template` is a practical Flutter starter repository for Android, Web, Linux, and Windows. It keeps the local setup small by running the toolchain inside Docker, while staying close to normal Flutter and general software engineering workflows.
 
-## What this template includes
+## Goals
 
-- Feature-first Flutter app structure
-- `go_router` for navigation
-- `flutter_riverpod` for dependency wiring
+- Keep the project familiar to Flutter developers
+- Support a single app repository that can ship to multiple platforms
+- Avoid requiring Flutter on the host machine
+- Provide a clear baseline for CI, release work, and future app customization
+
+## Included stack
+
+- Flutter stable
+- `go_router` for app navigation
+- `flutter_riverpod` for app wiring and shared configuration
 - `dio` for HTTP client setup
 - `freezed` and `json_serializable` for generated models
-- Docker and devcontainer setup for local development
-- GitHub Actions for PR validation
-- GitLab CI for NAS self-hosted runner validation
+- Docker and devcontainer support
+- GitHub Actions for pull request validation
+- GitLab CI for self-hosted runner validation
 - Codemagic workflows for build and delivery
+
+## Supported platforms
+
+- Android
+- Web
+- Linux
+- Windows
+
+Current validation baseline is documented in [docs/platform-baseline.md](docs/platform-baseline.md).
 
 ## Local requirements
 
@@ -20,9 +36,11 @@
 - Docker Desktop
 - An editor such as VS Code or Codex
 
-Flutter is intentionally not required on the host.
+Flutter is intentionally not required on the host machine.
 
 ## Quick start
+
+`Makefile` is the source of truth for local and CI commands. `scripts/dev.ps1` is a thin Windows wrapper around those same tasks.
 
 ### PowerShell on Windows
 
@@ -36,7 +54,7 @@ Flutter is intentionally not required on the host.
 
 ### Make targets
 
-These are kept for CI and Unix-like environments:
+These commands are the canonical local and CI interface:
 
 ```bash
 make setup
@@ -45,12 +63,13 @@ make lint
 make test
 make build-web
 make build-android
+make build-aab
 make build-linux
 ```
 
-## Template defaults
+## Default configuration
 
-This repository ships with valid placeholder defaults so the project can build immediately:
+The template ships with buildable placeholder values:
 
 - App name: `Template App`
 - Brand name: `Template Brand`
@@ -58,11 +77,9 @@ This repository ships with valid placeholder defaults so the project can build i
 - API base URL: `https://api.example.com`
 - Environment: `dev`
 
-These defaults are wired through `--dart-define` values and can be overridden without editing Dart code.
+These values are provided through `--dart-define` and read by [`lib/app/config/app_defines.dart`](lib/app/config/app_defines.dart).
 
-## Runtime configuration
-
-The app reads the following compile-time values:
+### Runtime configuration keys
 
 - `APP_ENV`
 - `APP_NAME`
@@ -75,30 +92,54 @@ Examples:
 ```powershell
 ./scripts/dev.ps1 run --dart-define APP_ENV=stage --dart-define APP_NAME="Client App"
 ./scripts/dev.ps1 build-web --dart-define APP_ENV=prod --dart-define API_BASE_URL=https://api.client.example
+./scripts/dev.ps1 build-aab --dart-define APP_ENV=prod
 ```
 
-## CI/CD flow
+## Project structure
 
-- GitHub Actions: format, analyze, test, codegen verification, generated diff check, and web smoke build
-- GitLab CI: shell-runner pipeline for Docker-based verification inside the NAS GitLab environment
-- Codemagic: Android, Web, Linux, and Windows build workflows
+The project uses a simple feature-first layout:
 
-Recommended release flow:
+- `lib/app`: app shell, router, theme, and configuration
+- `lib/core`: reusable infrastructure and widgets
+- `lib/features`: app-facing feature code
+- `assets`: static project assets
+- `test` and `integration_test`: automated tests
 
-- `pull_request` -> GitHub Actions validation
-- `main` merge -> optional dev/stage Codemagic builds
-- `v*.*.*` tag -> production Codemagic builds
+The current structure guide is in [docs/project-structure.md](docs/project-structure.md).
+
+## Validation and CI
+
+- GitHub Actions validates formatting, analysis, tests, code generation, and a web smoke build
+- GitLab CI validates the same Flutter workflow on the NAS-hosted runner
+- Codemagic handles multi-platform delivery workflows
+
+The verification checklist lives in [docs/verification-checklist.md](docs/verification-checklist.md).
+
+## Android release baseline
+
+- Debug and release APK builds are supported
+- Release AAB generation is supported with `build-aab`
+- Release signing is still project-specific and should be configured after creating a real app from this template
+
+See [docs/platform-baseline.md](docs/platform-baseline.md) for the current Android packaging notes.
 
 ## Creating a new app from this template
 
-1. Create a new repository from this GitHub template.
-2. Replace visible branding and identifiers with your app values.
-3. Update the package/application IDs in Android, Linux, and Windows metadata.
-4. Replace launcher icons, splash assets, and any brand configuration files.
-5. Configure Codemagic environment variables, signing, and distribution targets.
+1. Create a new repository from this template.
+2. Update the app name, application ID, API URL, and environment values.
+3. Replace visible branding and platform metadata.
+4. Confirm local Docker commands and CI pipelines pass.
+5. Add project-specific signing, distribution, and release credentials.
 
-See [docs/template-customization.md](docs/template-customization.md) for the exact checklist.
+Use [docs/template-customization.md](docs/template-customization.md) as the exact checklist.
+
+## Branch and release baseline
+
+- `main`: stable baseline
+- `develop`: next integration line
+- `release/*`: create only when a release stabilization branch is needed
+- Tags and release notes are created from `main`
 
 ## Shared code policy
 
-Start by copying this template per app. When repeated edits begin to show up across multiple application repositories, promote those pieces into a shared package repository. Until then, keep each app repo independent and easy to reason about.
+Start with one repository per app. If the same code has to be maintained across multiple app repositories, promote that repeated code into a shared package repository later. Until then, keep each application repository independent and easy to reason about.

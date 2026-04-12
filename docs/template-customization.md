@@ -1,29 +1,50 @@
 # Template customization checklist
 
-Use this checklist every time you create a new repository from `flutter_app_template`.
+Use this checklist after creating a new repository from `flutter_app_template`.
 
-## Replace identifiers
+## 1. Update compile-time configuration
 
-- Update `APP_NAME`, `BRAND_NAME`, `APPLICATION_ID`, and `API_BASE_URL`
-- Replace the default Android application ID in [android/app/build.gradle.kts](../android/app/build.gradle.kts)
-- Replace the Kotlin package declaration in [android/app/src/main/kotlin/com/example/template/flutter_app_template/MainActivity.kt](../android/app/src/main/kotlin/com/example/template/flutter_app_template/MainActivity.kt)
-- Replace the Linux application ID in [linux/CMakeLists.txt](../linux/CMakeLists.txt)
+- Replace the placeholder values passed through `--dart-define`
+- Confirm the defaults in [`lib/app/config/app_defines.dart`](../lib/app/config/app_defines.dart)
 
-## Replace visible branding
+Recommended values to replace first:
 
-- Update the title and metadata in [web/index.html](../web/index.html)
-- Update the web manifest in [web/manifest.json](../web/manifest.json)
-- Update the Windows product metadata in [windows/runner/Runner.rc](../windows/runner/Runner.rc)
-- Replace launcher icons and splash assets
+- `APP_NAME`
+- `BRAND_NAME`
+- `APPLICATION_ID`
+- `API_BASE_URL`
+- `APP_ENV`
 
-## Configure CI/CD
+## 2. Update platform identifiers
 
-- Add GitHub branch protection and required checks for `.github/workflows/ci.yml`
-- Confirm the NAS GitLab runner tags in `.gitlab-ci.yml` match the target project runner configuration
-- Configure Codemagic environment groups and signing credentials
-- Replace the placeholder production API URL and environment values in [codemagic.yaml](../codemagic.yaml)
+- Android namespace and application ID: [`android/app/build.gradle.kts`](../android/app/build.gradle.kts)
+- Android Kotlin package path: [`android/app/src/main/kotlin/com/example/template/flutter_app_template/MainActivity.kt`](../android/app/src/main/kotlin/com/example/template/flutter_app_template/MainActivity.kt)
+- Linux metadata: [`linux/CMakeLists.txt`](../linux/CMakeLists.txt)
+- Windows metadata: [`windows/runner/Runner.rc`](../windows/runner/Runner.rc)
 
-## App implementation
+## 3. Update visible app branding
 
-- Replace the example `home` and `settings` features with real app flows
-- Move any repeated code into a shared package repository only after it becomes a maintenance burden across multiple app repos
+- App title and web metadata: [`web/index.html`](../web/index.html)
+- Web manifest: [`web/manifest.json`](../web/manifest.json)
+- Starter copy shown in the app: [`lib/features/home/presentation/home_screen.dart`](../lib/features/home/presentation/home_screen.dart)
+- Theme and color system: [`lib/app/theme/app_theme.dart`](../lib/app/theme/app_theme.dart)
+- Replace launcher icons and splash assets as needed
+
+## 4. Confirm the build workflow
+
+- Run the local verification checklist in [`docs/verification-checklist.md`](./verification-checklist.md)
+- Confirm GitHub Actions passes
+- Confirm GitLab CI passes on the assigned runner
+- Replace placeholder environment values in [`codemagic.yaml`](../codemagic.yaml)
+
+## 5. Prepare Android release configuration
+
+- Verify APK generation
+- Verify AAB generation
+- Replace the default debug signing approach in [`android/app/build.gradle.kts`](../android/app/build.gradle.kts)
+- Store signing credentials outside the repository
+
+## 6. Replace starter feature content
+
+- Replace the example `home` and `settings` flows with real app features
+- Keep the current structure unless repeated maintenance clearly justifies a shared package split
