@@ -40,7 +40,10 @@ Flutter is intentionally not required on the host machine.
 
 ## Quick start
 
-`Makefile` is the source of truth for local and CI commands. `scripts/dev.ps1` is a thin Windows wrapper around those same tasks.
+Use the entrypoint that fits the environment:
+
+- `scripts/dev.ps1` for Windows hosts
+- `make` for Unix-like shells and CI
 
 ### PowerShell on Windows
 
@@ -119,9 +122,10 @@ The verification checklist lives in [docs/verification-checklist.md](docs/verifi
 
 - Debug and release APK builds are supported
 - Release AAB generation is supported with `build-aab`
-- Release signing is still project-specific and should be configured after creating a real app from this template
+- Release signing uses the standard `android/key.properties` pattern when a real app adds its own keystore
+- GitLab tag pipelines now keep web and AAB artifacts as a practical release baseline
 
-See [docs/platform-baseline.md](docs/platform-baseline.md) for the current Android packaging notes.
+See [docs/platform-baseline.md](docs/platform-baseline.md) for the current Android packaging notes and [docs/release-hardening.md](docs/release-hardening.md) for the release setup flow.
 
 ## Creating a new app from this template
 

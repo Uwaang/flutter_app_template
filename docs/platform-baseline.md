@@ -19,7 +19,7 @@ This document records what has been validated in the template and where platform
 - APK build verified
 - AAB build verified
 - Default Android namespace and application ID are placeholder values
-- Release signing still uses debug signing in the template
+- Release signing falls back to debug signing until `android/key.properties` is added
 
 ### Paths
 
@@ -29,8 +29,9 @@ This document records what has been validated in the template and where platform
 ### Project-specific follow-up
 
 - Replace `applicationId` and `namespace`
-- Add a real release signing configuration
+- Add `android/key.properties` and a real release signing configuration
 - Store keystore material outside the repository
+- Decide whether GitLab and Codemagic should receive signing material or build unsigned baseline artifacts only
 
 ## Web
 

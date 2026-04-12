@@ -53,3 +53,19 @@ build_web_artifact:
     expire_in: 7 days
     paths:
       - build/web/
+
+build_android_aab_artifact:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /\[skip ci\]/i'
+      when: never
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+      when: on_success
+    - when: never
+  script:
+    - flutter build appbundle --release --dart-define=APP_ENV=prod --dart-define=APP_NAME="${APP_NAME}" --dart-define=BRAND_NAME="${BRAND_NAME}" --dart-define=APPLICATION_ID="${APPLICATION_ID}" --dart-define=API_BASE_URL="${API_BASE_URL}"
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - build/app/outputs/bundle/release/*.aab
