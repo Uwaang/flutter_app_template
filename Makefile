@@ -5,13 +5,13 @@ APP_NAME ?= Template App
 BRAND_NAME ?= Template Brand
 APPLICATION_ID ?= com.example.template.app
 API_BASE_URL ?= https://api.example.com
-FLUTTER_DEFINES = --dart-define=APP_ENV=$(APP_ENV) --dart-define=APP_NAME=$(APP_NAME) --dart-define=BRAND_NAME=$(BRAND_NAME) --dart-define=APPLICATION_ID=$(APPLICATION_ID) --dart-define=API_BASE_URL=$(API_BASE_URL)
+FLUTTER_DEFINES = --dart-define=APP_ENV='$(APP_ENV)' --dart-define=APP_NAME='$(APP_NAME)' --dart-define=BRAND_NAME='$(BRAND_NAME)' --dart-define=APPLICATION_ID='$(APPLICATION_ID)' --dart-define=API_BASE_URL='$(API_BASE_URL)'
 
 define run_in_container
 	$(DOCKER_COMPOSE) run --rm $(SERVICE) bash -lc "$(1)"
 endef
 
-.PHONY: setup gen lint test ci build-web build-android build-linux shell
+.PHONY: setup gen lint test ci build-web build-android build-aab build-linux shell
 
 setup:
 	$(call run_in_container,flutter pub get)
@@ -33,6 +33,9 @@ build-web:
 
 build-android:
 	$(call run_in_container,flutter build apk --release $(FLUTTER_DEFINES))
+
+build-aab:
+	$(call run_in_container,flutter build appbundle --release $(FLUTTER_DEFINES))
 
 build-linux:
 	$(call run_in_container,flutter build linux --release $(FLUTTER_DEFINES))
