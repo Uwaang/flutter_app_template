@@ -26,7 +26,7 @@ test:
 	$(call run_in_container,flutter test)
 
 ci:
-	$(call run_in_container,dart format --output=none --set-exit-if-changed . && flutter analyze && flutter test && dart run build_runner build --delete-conflicting-outputs && git diff --exit-code && flutter build web --release $(FLUTTER_DEFINES))
+	$(call run_in_container,git config --global --add safe.directory /workspace && dart format --output=none --set-exit-if-changed . && flutter analyze && flutter test && dart run build_runner build --delete-conflicting-outputs && git diff --exit-code && flutter build web --release $(FLUTTER_DEFINES))
 
 build-web:
 	$(call run_in_container,flutter build web --release $(FLUTTER_DEFINES))

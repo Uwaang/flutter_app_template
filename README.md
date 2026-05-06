@@ -123,7 +123,8 @@ The verification checklist lives in [docs/verification-checklist.md](docs/verifi
 - Debug and release APK builds are supported
 - Release AAB generation is supported with `build-aab`
 - Release signing uses the standard `android/key.properties` pattern when a real app adds its own keystore
-- GitLab tag pipelines now keep web and AAB artifacts as a practical release baseline
+- GitLab tag pipelines now keep named web and AAB artifacts as a practical release baseline
+- GitLab CI and Codemagic can restore signing secrets through shared environment variable conventions
 
 See [docs/platform-baseline.md](docs/platform-baseline.md) for the current Android packaging notes and [docs/release-hardening.md](docs/release-hardening.md) for the release setup flow.
 

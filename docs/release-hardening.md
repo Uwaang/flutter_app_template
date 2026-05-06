@@ -40,6 +40,30 @@ Recommended setup:
 
 Until that file exists, release Android builds stay buildable by using the debug signing configuration.
 
+## CI signing secret injection
+
+GitLab CI and Codemagic use the shared script `scripts/setup-android-signing.sh`.
+
+Supported environment variables:
+
+- `ANDROID_KEYSTORE_BASE64`
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
+- `ANDROID_KEYSTORE_FILE_NAME` (optional, defaults to `upload-keystore.jks`)
+- `REQUIRE_ANDROID_SIGNING` (`true` or `false`)
+
+Behavior:
+
+- When `ANDROID_KEYSTORE_BASE64` is present, the script restores the keystore into `android/keystore/` and writes `android/key.properties`
+- When signing variables are missing and `REQUIRE_ANDROID_SIGNING=true`, the build fails early
+- When signing variables are missing and `REQUIRE_ANDROID_SIGNING=false`, the template keeps using debug signing so the build stays reproducible
+
+Recommended policy:
+
+- Template repository: keep `REQUIRE_ANDROID_SIGNING=false`
+- Real app production repository: set `REQUIRE_ANDROID_SIGNING=true` for protected tag builds
+
 ## Local release commands
 
 From the repository root:
@@ -67,6 +91,11 @@ Tag pipelines matching `v*.*.*` publish:
 
 - `build/web/`
 - `build/app/outputs/bundle/release/*.aab`
+
+Artifact names:
+
+- `${project}-${tag}-web`
+- `${project}-${tag}-android-aab`
 
 This keeps the template close to a practical release baseline without forcing store upload automation into the starter itself.
 

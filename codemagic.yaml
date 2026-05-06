@@ -44,6 +44,7 @@ workflows:
         BRAND_NAME: Template Brand
         APPLICATION_ID: com.example.template.app
         API_BASE_URL: https://api.example.com
+        REQUIRE_ANDROID_SIGNING: "false"
     triggering:
       events:
         - tag
@@ -53,6 +54,8 @@ workflows:
     scripts:
       - name: Install dependencies
         script: flutter pub get
+      - name: Prepare Android signing
+        script: bash scripts/setup-android-signing.sh
       - name: Build App Bundle
         script: >
           flutter build appbundle --release

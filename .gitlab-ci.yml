@@ -9,6 +9,7 @@ variables:
   BRAND_NAME: Template Brand
   APPLICATION_ID: com.example.template.app
   API_BASE_URL: https://api.example.com
+  REQUIRE_ANDROID_SIGNING: "false"
 
 default:
   image: ghcr.io/cirruslabs/flutter:stable
@@ -17,6 +18,7 @@ default:
     - ct102
     - local
   before_script:
+    - git config --global --add safe.directory "${CI_PROJECT_DIR}"
     - flutter --version
     - flutter pub get
 
@@ -49,6 +51,7 @@ build_web_artifact:
   script:
     - flutter build web --release --dart-define=APP_ENV=prod --dart-define=APP_NAME="${APP_NAME}" --dart-define=BRAND_NAME="${BRAND_NAME}" --dart-define=APPLICATION_ID="${APPLICATION_ID}" --dart-define=API_BASE_URL="${API_BASE_URL}"
   artifacts:
+    name: "${CI_PROJECT_NAME}-${CI_COMMIT_TAG}-web"
     when: always
     expire_in: 7 days
     paths:
@@ -63,8 +66,10 @@ build_android_aab_artifact:
       when: on_success
     - when: never
   script:
+    - bash scripts/setup-android-signing.sh
     - flutter build appbundle --release --dart-define=APP_ENV=prod --dart-define=APP_NAME="${APP_NAME}" --dart-define=BRAND_NAME="${BRAND_NAME}" --dart-define=APPLICATION_ID="${APPLICATION_ID}" --dart-define=API_BASE_URL="${API_BASE_URL}"
   artifacts:
+    name: "${CI_PROJECT_NAME}-${CI_COMMIT_TAG}-android-aab"
     when: always
     expire_in: 7 days
     paths:
