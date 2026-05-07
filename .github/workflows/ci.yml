@@ -48,7 +48,7 @@ jobs:
         run: flutter test
 
       - name: Verify generated code
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build
 
       - name: Ensure generated files are committed
         run: git diff --exit-code
@@ -57,7 +57,7 @@ jobs:
         run: >
           flutter build web --release
           --dart-define=APP_ENV=ci
-          --dart-define=APP_NAME=Template App
-          --dart-define=BRAND_NAME=Template Brand
+          --dart-define="APP_NAME=Template App"
+          --dart-define="BRAND_NAME=Template Brand"
           --dart-define=APPLICATION_ID=com.example.template.app
           --dart-define=API_BASE_URL=https://api.example.com

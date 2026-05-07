@@ -36,7 +36,7 @@ verify_template:
     - dart format --output=none --set-exit-if-changed .
     - flutter analyze
     - flutter test
-    - dart run build_runner build --delete-conflicting-outputs
+    - dart run build_runner build
     - git diff --exit-code
     - flutter build web --release --dart-define=APP_ENV="${APP_ENV}" --dart-define=APP_NAME="${APP_NAME}" --dart-define=BRAND_NAME="${BRAND_NAME}" --dart-define=APPLICATION_ID="${APPLICATION_ID}" --dart-define=API_BASE_URL="${API_BASE_URL}"
 

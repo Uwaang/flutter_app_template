@@ -24,7 +24,7 @@ $flutterDefines = @(
 
 switch ($Task) {
     'setup' { & docker @dockerArgs flutter pub get }
-    'gen' { & docker @dockerArgs dart run build_runner build --delete-conflicting-outputs }
+    'gen' { & docker @dockerArgs dart run build_runner build }
     'lint' { & docker @dockerArgs flutter analyze }
     'test' { & docker @dockerArgs flutter test }
     'ci' {
@@ -34,7 +34,7 @@ switch ($Task) {
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         & docker @dockerArgs flutter test
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-        & docker @dockerArgs dart run build_runner build --delete-conflicting-outputs
+        & docker @dockerArgs dart run build_runner build
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         & git diff --exit-code
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

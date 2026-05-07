@@ -6,6 +6,7 @@ Use this checklist after creating a new repository from `flutter_app_template`.
 
 - Replace the placeholder values passed through `--dart-define`
 - Confirm the defaults in [`lib/app/config/app_defines.dart`](../lib/app/config/app_defines.dart)
+- Update the starter manifest in [`assets/config/brand_defaults.json`](../assets/config/brand_defaults.json)
 
 Recommended values to replace first:
 
@@ -18,6 +19,7 @@ Recommended values to replace first:
 ## 2. Update platform identifiers
 
 - Android namespace and application ID: [`android/app/build.gradle.kts`](../android/app/build.gradle.kts)
+- Android launcher label: [`android/app/src/main/AndroidManifest.xml`](../android/app/src/main/AndroidManifest.xml)
 - Android Kotlin package path: [`android/app/src/main/kotlin/com/example/template/flutter_app_template/MainActivity.kt`](../android/app/src/main/kotlin/com/example/template/flutter_app_template/MainActivity.kt)
 - Linux metadata: [`linux/CMakeLists.txt`](../linux/CMakeLists.txt)
 - Windows metadata: [`windows/runner/Runner.rc`](../windows/runner/Runner.rc)
