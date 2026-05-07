@@ -2,6 +2,16 @@
 
 Use this checklist after creating a new repository from `flutter_app_template`.
 
+On Windows, use [`scripts/new_app.ps1`](../scripts/new_app.ps1) to apply the common placeholder replacements. The script runs in dry-run mode by default and only writes files when `-Apply` is passed.
+
+```powershell
+./scripts/new_app.ps1 `
+  -AppName "Client App" `
+  -BrandName "Client Brand" `
+  -ApplicationId "com.example.client" `
+  -ApiBaseUrl "https://api.client.example"
+```
+
 ## 1. Update compile-time configuration
 
 - Replace the placeholder values passed through `--dart-define`

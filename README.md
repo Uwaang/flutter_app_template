@@ -138,6 +138,18 @@ See [docs/platform-baseline.md](docs/platform-baseline.md) for the current Andro
 
 Use [docs/template-customization.md](docs/template-customization.md) as the exact checklist.
 
+For Windows-first customization, start with the dry-run generator:
+
+```powershell
+./scripts/new_app.ps1 `
+  -AppName "Client App" `
+  -BrandName "Client Brand" `
+  -ApplicationId "com.example.client" `
+  -ApiBaseUrl "https://api.client.example"
+```
+
+Review the planned file edits, then re-run with `-Apply` to write the changes.
+
 ## Branch and release baseline
 
 - `main`: stable baseline
