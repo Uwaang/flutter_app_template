@@ -52,6 +52,15 @@ Confirm that `.gitlab-ci.yml` passes on the project runner:
 - release web build
 - release AAB build on version tags
 
+## Codemagic baseline
+
+Codemagic is currently a prepared but inactive external delivery path. Only use it as a verified baseline after:
+
+- The repository is available from an externally reachable Git remote
+- A Codemagic account is connected to the app
+- The configured build instance types are available to the account
+- Android and web workflows have passed at least once
+
 ## Platform sanity check
 
 - Android APK exists after release build

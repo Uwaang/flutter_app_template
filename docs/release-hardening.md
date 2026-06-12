@@ -13,7 +13,7 @@ This document describes the current release packaging baseline and the minimum f
 - Release APK build is supported
 - Release AAB build is supported
 - GitLab tag pipelines publish web and AAB artifacts
-- Codemagic tag workflows build Android, web, Linux, and Windows artifacts
+- Codemagic tag workflows are defined for Android, web, Linux, and Windows, but are not part of the currently verified delivery path
 - Android release signing falls back to the debug key until `android/key.properties` is added
 
 ## Android signing
@@ -42,7 +42,7 @@ Until that file exists, release Android builds stay buildable by using the debug
 
 ## CI signing secret injection
 
-GitLab CI and Codemagic use the shared script `scripts/setup-android-signing.sh`.
+GitLab CI and the prepared Codemagic workflows use the shared script `scripts/setup-android-signing.sh`.
 
 Supported environment variables:
 
@@ -99,11 +99,22 @@ Artifact names:
 
 This keeps the template close to a practical release baseline without forcing store upload automation into the starter itself.
 
+## Codemagic status
+
+`codemagic.yaml` is kept as a future external delivery template. The current repository remote is a NAS-hosted GitLab URL that is not expected to be reachable from Codemagic cloud builds.
+
+Before treating Codemagic as an active release path:
+
+1. Mirror the repository to an externally reachable Git provider or otherwise make the repository cloneable from Codemagic
+2. Create or connect a Codemagic account for the app
+3. Confirm access to the configured `linux_x2` and `windows_x2` instance types
+4. Run Android and web workflows first, then Linux and Windows
+
 ## Project-specific follow-up
 
 Before shipping a real app:
 
 1. Replace placeholder app metadata
 2. Add real Android signing material
-3. Add project-specific secret management in CI and Codemagic
+3. Add project-specific secret management in CI and any active external delivery service
 4. Decide whether store submission should stay manual or be automated later

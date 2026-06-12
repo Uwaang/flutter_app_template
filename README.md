@@ -19,7 +19,7 @@
 - Docker and devcontainer support
 - GitHub Actions for pull request validation
 - GitLab CI for self-hosted runner validation
-- Codemagic workflows for build and delivery
+- Codemagic workflow templates for future external delivery
 
 ## Supported platforms
 
@@ -114,7 +114,7 @@ The current structure guide is in [docs/project-structure.md](docs/project-struc
 
 - GitHub Actions validates formatting, analysis, tests, code generation, and a web smoke build
 - GitLab CI validates the same Flutter workflow on the NAS-hosted runner
-- Codemagic handles multi-platform delivery workflows
+- Codemagic configuration is present, but remote builds require an externally reachable repository mirror and a Codemagic account
 
 The verification checklist lives in [docs/verification-checklist.md](docs/verification-checklist.md).
 
@@ -124,7 +124,7 @@ The verification checklist lives in [docs/verification-checklist.md](docs/verifi
 - Release AAB generation is supported with `build-aab`
 - Release signing uses the standard `android/key.properties` pattern when a real app adds its own keystore
 - GitLab tag pipelines now keep named web and AAB artifacts as a practical release baseline
-- GitLab CI and Codemagic can restore signing secrets through shared environment variable conventions
+- GitLab CI and future Codemagic builds can restore signing secrets through shared environment variable conventions
 
 See [docs/platform-baseline.md](docs/platform-baseline.md) for the current Android packaging notes and [docs/release-hardening.md](docs/release-hardening.md) for the release setup flow.
 

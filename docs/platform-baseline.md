@@ -11,6 +11,7 @@ This document records what has been validated in the template and where platform
 - Windows project files generated and committed
 - GitHub Actions validation workflow
 - GitLab CI validation on `ct102-docker-runner`
+- Codemagic workflow templates present but not remotely verified
 
 ## Android
 
@@ -31,7 +32,7 @@ This document records what has been validated in the template and where platform
 - Replace `applicationId` and `namespace`
 - Add `android/key.properties` and a real release signing configuration
 - Store keystore material outside the repository
-- Decide whether GitLab and Codemagic should receive signing material or build unsigned baseline artifacts only
+- Decide whether GitLab and any external delivery service should receive signing material or build unsigned baseline artifacts only
 
 ## Web
 
