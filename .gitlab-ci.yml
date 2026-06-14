@@ -59,11 +59,12 @@ build_web_artifact:
 
 build_android_aab_artifact:
   stage: build
+  allow_failure: true
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /\[skip ci\]/i'
       when: never
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
-      when: on_success
+      when: manual
     - when: never
   script:
     - bash scripts/setup-android-signing.sh

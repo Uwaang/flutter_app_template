@@ -10,6 +10,7 @@ This document records what has been validated in the template and where platform
 - Linux release build
 - Windows project files generated and committed
 - GitHub Actions validation workflow
+- GitHub Actions release workflow for web and Android AAB artifacts
 - GitLab CI validation on `ct102-docker-runner`
 - Codemagic workflow templates present but not remotely verified
 

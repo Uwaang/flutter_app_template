@@ -39,6 +39,13 @@ Confirm that `.github/workflows/ci.yml` passes:
 - generated diff check
 - web smoke build
 
+For public release validation, confirm that `.github/workflows/release.yml` passes on a version tag:
+
+- release web build
+- release Android AAB build
+- web artifact upload
+- AAB artifact upload
+
 ## GitLab CI baseline
 
 Confirm that `.gitlab-ci.yml` passes on the project runner:
@@ -50,7 +57,7 @@ Confirm that `.gitlab-ci.yml` passes on the project runner:
 - code generation
 - generated diff check
 - release web build
-- release AAB build on version tags
+- manual release AAB build only when the runner is intentionally selected for that heavier job
 
 ## Codemagic baseline
 
