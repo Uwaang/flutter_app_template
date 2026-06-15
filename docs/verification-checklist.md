@@ -61,6 +61,8 @@ Confirm that `.gitlab-ci.yml` passes on the project runner:
 - release web build
 - manual release AAB build only when the runner is intentionally selected for that heavier job
 
+The default runner tags are `docker` and `local`. Replace them in `.gitlab-ci.yml` if your self-hosted runner uses a different tag convention.
+
 ## Codemagic baseline
 
 Codemagic is currently a prepared but inactive external delivery path. Only use it as a verified baseline after:

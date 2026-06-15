@@ -49,7 +49,7 @@ Recommended values to replace first:
 - Run the local verification checklist in [`docs/verification-checklist.md`](./verification-checklist.md)
 - Confirm `pubspec.lock` is stable after dependency resolution
 - Confirm GitHub Actions passes
-- Confirm GitLab CI passes on the assigned runner
+- Confirm GitLab CI passes on the assigned runner, and update `.gitlab-ci.yml` runner tags when needed
 - Replace placeholder environment values in [`codemagic.yaml`](../codemagic.yaml)
 
 ## 5. Prepare Android release configuration

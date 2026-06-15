@@ -153,6 +153,16 @@ For Windows-first customization, start with the dry-run generator:
 
 Review the planned file edits, then re-run with `-Apply` to write the changes.
 
+After applying the generator, stabilize dependencies and run the Docker CI target:
+
+```powershell
+./scripts/dev.ps1 setup
+git status --short
+./scripts/dev.ps1 ci
+```
+
+Commit any intentional `pubspec.lock` change from dependency resolution before treating the generated app as verified.
+
 ## Branch and release baseline
 
 - `main`: stable baseline

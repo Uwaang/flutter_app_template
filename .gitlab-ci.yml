@@ -15,7 +15,6 @@ default:
   image: ghcr.io/cirruslabs/flutter:stable
   tags:
     - docker
-    - ct102
     - local
   before_script:
     - git config --global --add safe.directory "${CI_PROJECT_DIR}"
