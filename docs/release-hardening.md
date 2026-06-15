@@ -13,7 +13,7 @@ This document describes the current release packaging baseline and the minimum f
 - Release APK build is supported
 - Release AAB build is supported
 - GitHub tag workflows publish web and AAB artifacts for public-repo full validation
-- NAS GitLab tag pipelines publish web artifacts automatically and keep AAB artifacts manual
+- Self-hosted GitLab tag pipelines publish web artifacts automatically and keep AAB artifacts manual by default
 - Codemagic tag workflows are defined for Android, web, Linux, and Windows, but are not part of the currently verified delivery path
 - Android release signing falls back to the debug key until `android/key.properties` is added
 
@@ -100,7 +100,7 @@ Artifact names:
 
 This is the preferred full release validation path for a public mirror or public template repository.
 
-## NAS GitLab release artifacts
+## Self-hosted GitLab release artifacts
 
 Tag pipelines matching `v*.*.*` publish:
 
@@ -110,11 +110,11 @@ Artifact names:
 
 - `${project}-${tag}-web`
 
-The Android AAB artifact job exists but is manual and allowed to fail. The NAS GitLab runner is intended for lightweight private validation, while full Android artifact validation should run on GitHub Actions or a stronger runner.
+The Android AAB artifact job exists but is manual and allowed to fail. This keeps self-hosted runners focused on lightweight private validation, while full Android artifact validation should run on GitHub Actions or a stronger runner.
 
 ## Codemagic status
 
-`codemagic.yaml` is kept as a future external delivery template. The current repository remote is a NAS-hosted GitLab URL that is not expected to be reachable from Codemagic cloud builds.
+`codemagic.yaml` is kept as a future external delivery template. Codemagic requires the repository to be reachable from Codemagic cloud builds and requires an account connected to the app.
 
 Before treating Codemagic as an active release path:
 

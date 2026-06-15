@@ -12,6 +12,8 @@ On Windows, use [`scripts/new_app.ps1`](../scripts/new_app.ps1) to apply the com
   -ApiBaseUrl "https://api.client.example"
 ```
 
+After applying replacements, run `flutter pub get` through the local Docker workflow and commit any resulting `pubspec.lock` change before using the full CI target.
+
 ## 1. Update compile-time configuration
 
 - Replace the placeholder values passed through `--dart-define`
@@ -45,6 +47,7 @@ Recommended values to replace first:
 ## 4. Confirm the build workflow
 
 - Run the local verification checklist in [`docs/verification-checklist.md`](./verification-checklist.md)
+- Confirm `pubspec.lock` is stable after dependency resolution
 - Confirm GitHub Actions passes
 - Confirm GitLab CI passes on the assigned runner
 - Replace placeholder environment values in [`codemagic.yaml`](../codemagic.yaml)
