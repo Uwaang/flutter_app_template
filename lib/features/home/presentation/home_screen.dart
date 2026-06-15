@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter_app_template/app/config/app_config.dart';
+import 'package:flutter_app_template/app/router/app_router.dart';
 import 'package:flutter_app_template/core/network/api_client.dart';
 import 'package:flutter_app_template/core/widgets/info_tile.dart';
 import 'package:flutter_app_template/features/home/application/template_manifest_provider.dart';
@@ -22,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
         title: Text(config.appName),
         actions: [
           TextButton.icon(
-            onPressed: () => context.go('/settings'),
+            onPressed: () => context.go(AppRoutePaths.settings),
             icon: const Icon(Icons.tune),
             label: const Text('Template guide'),
           ),

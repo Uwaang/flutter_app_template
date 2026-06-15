@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_app_template/app/config/app_config.dart';
 import 'package:flutter_app_template/app/config/app_environment.dart';
@@ -59,5 +60,18 @@ void main() {
 
       expect(config.validate, throwsA(isA<StateError>()));
     });
+  });
+
+  test('appConfigProvider exposes validated template defaults', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    final config = container.read(appConfigProvider);
+
+    expect(config.appName, 'Template App');
+    expect(config.brandName, 'Template Brand');
+    expect(config.applicationId, 'com.example.template.app');
+    expect(config.apiBaseUrl, 'https://api.example.com');
+    expect(config.environment, AppEnvironment.dev);
   });
 }
