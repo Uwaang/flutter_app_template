@@ -117,6 +117,7 @@ The current structure guide is in [docs/project-structure.md](docs/project-struc
 - GitHub Actions release workflow builds web and Android AAB artifacts on version tags or manual dispatch
 - GitLab CI validates the same Flutter workflow on a self-hosted runner and keeps Android AAB artifact builds manual by default
 - Codemagic configuration is present, but remote builds require an externally reachable repository mirror and a Codemagic account
+- Local Docker builds use a pinned Flutter image digest by default; override `FLUTTER_IMAGE` only when intentionally refreshing the toolchain
 
 The verification checklist lives in [docs/verification-checklist.md](docs/verification-checklist.md).
 
@@ -127,7 +128,8 @@ The CI path is intentionally ordered as format check, code generation, generated
 - Debug and release APK builds are supported
 - Release AAB generation is supported with `build-aab`
 - Release signing uses the standard `android/key.properties` pattern when a real app adds its own keystore
-- GitHub tag workflows keep named web and AAB artifacts as the full public-repo release baseline
+- GitHub tag workflows reject production placeholder values, require Android signing material, and keep named web/AAB artifacts that include the commit SHA
+- GitHub manual release workflow runs are for explicit test artifacts by default and allow template placeholders only through workflow inputs
 - Self-hosted GitLab tag pipelines keep web artifacts automatically; Android AAB artifacts are manual because local runners are often intentionally lightweight
 - GitLab CI and future Codemagic builds can restore signing secrets through shared environment variable conventions
 

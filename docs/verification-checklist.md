@@ -41,12 +41,15 @@ Confirm that `.github/workflows/ci.yml` passes:
 
 For public release validation, confirm that `.github/workflows/release.yml` passes on a version tag:
 
+- release preflight
 - release web build
 - release Android AAB build
 - web artifact upload
 - AAB artifact upload
 
-If the tag push does not create an Actions run, dispatch the workflow manually against the same tag with `gh workflow run release.yml --ref vX.Y.Z` and record the run URL.
+Tag releases are stricter than manual test builds: they must use production environment values, must reject template placeholders, and must require Android signing.
+
+If the tag push does not create an Actions run, dispatch the workflow manually against the same tag with `gh workflow run release.yml --ref vX.Y.Z` and record the run URL. For the template repository itself, manual dispatch defaults to `APP_ENV=ci`, allows template placeholders, and produces explicit test artifacts.
 
 ## GitLab CI baseline
 
@@ -84,4 +87,6 @@ Codemagic is currently a prepared but inactive external delivery path. Only use 
 
 - `android/key.properties` is present when a real signed Android release is required
 - Placeholder app name and application ID have been replaced
+- `API_BASE_URL` does not point at `https://api.example.com` for production
+- `APP_ENV` is one of the supported environment names
 - CI artifact expectations for web and Android are still valid

@@ -5,6 +5,43 @@ on:
     tags:
       - 'v*.*.*'
   workflow_dispatch:
+    inputs:
+      app_env:
+        description: APP_ENV for manual release validation. Use prod only after replacing template placeholders.
+        required: true
+        default: ci
+      app_name:
+        description: APP_NAME passed to Flutter.
+        required: true
+        default: Template App
+      brand_name:
+        description: BRAND_NAME passed to Flutter.
+        required: true
+        default: Template Brand
+      application_id:
+        description: APPLICATION_ID passed to Flutter.
+        required: true
+        default: com.example.template.app
+      api_base_url:
+        description: API_BASE_URL passed to Flutter.
+        required: true
+        default: https://api.example.com
+      allow_template_placeholders:
+        description: Allow template placeholders for manual test artifacts only.
+        required: true
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+        default: 'true'
+      require_android_signing:
+        description: Require Android signing material for manual Android AAB builds.
+        required: true
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+        default: 'false'
 
 concurrency:
   group: release-${{ github.ref }}
@@ -14,11 +51,13 @@ permissions:
   contents: read
 
 env:
-  APP_NAME: Template App
-  BRAND_NAME: Template Brand
-  APPLICATION_ID: com.example.template.app
-  API_BASE_URL: https://api.example.com
-  REQUIRE_ANDROID_SIGNING: 'false'
+  APP_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.app_env || 'prod' }}
+  APP_NAME: ${{ github.event_name == 'workflow_dispatch' && inputs.app_name || 'Template App' }}
+  BRAND_NAME: ${{ github.event_name == 'workflow_dispatch' && inputs.brand_name || 'Template Brand' }}
+  APPLICATION_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.application_id || 'com.example.template.app' }}
+  API_BASE_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.api_base_url || 'https://api.example.com' }}
+  ALLOW_TEMPLATE_PLACEHOLDERS: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_template_placeholders || 'false' }}
+  REQUIRE_ANDROID_SIGNING: ${{ github.event_name == 'workflow_dispatch' && inputs.require_android_signing || 'true' }}
   ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
   ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
   ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -32,6 +71,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Release preflight
+        run: bash scripts/validate-release-config.sh
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -44,7 +86,7 @@ jobs:
       - name: Build web
         run: >
           flutter build web --release
-          --dart-define=APP_ENV=prod
+          --dart-define="APP_ENV=${APP_ENV}"
           --dart-define="APP_NAME=${APP_NAME}"
           --dart-define="BRAND_NAME=${BRAND_NAME}"
           --dart-define="APPLICATION_ID=${APPLICATION_ID}"
@@ -53,7 +95,7 @@ jobs:
       - name: Upload web artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ github.event.repository.name }}-${{ github.ref_name }}-web
+          name: ${{ github.event.repository.name }}-${{ github.ref_name }}-${{ github.sha }}-web
           path: build/web/
           if-no-files-found: error
 
@@ -63,6 +105,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Release preflight
+        run: bash scripts/validate-release-config.sh
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -85,7 +130,7 @@ jobs:
       - name: Build Android App Bundle
         run: >
           flutter build appbundle --release
-          --dart-define=APP_ENV=prod
+          --dart-define="APP_ENV=${APP_ENV}"
           --dart-define="APP_NAME=${APP_NAME}"
           --dart-define="BRAND_NAME=${BRAND_NAME}"
           --dart-define="APPLICATION_ID=${APPLICATION_ID}"
@@ -94,6 +139,6 @@ jobs:
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ github.event.repository.name }}-${{ github.ref_name }}-android-aab
+          name: ${{ github.event.repository.name }}-${{ github.ref_name }}-${{ github.sha }}-android-aab
           path: build/app/outputs/bundle/release/*.aab
           if-no-files-found: error
