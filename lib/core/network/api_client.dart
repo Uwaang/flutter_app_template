@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_app_template/app/config/app_config.dart';
+import 'package:flutter_app_template/app/config/feature_flags.dart';
 
 abstract final class ApiClientDefaults {
   static const connectTimeout = Duration(seconds: 10);
@@ -31,6 +32,7 @@ final dioProvider = Provider<Dio>((ref) {
   final buildCommonHeaders = ref.watch(commonHeadersProvider);
   final authToken = ref.watch(authTokenProvider);
   final mapError = ref.watch(apiErrorMapperProvider);
+  final featureFlags = ref.watch(featureFlagsProvider);
 
   final dio = Dio(
     BaseOptions(
@@ -55,7 +57,7 @@ final dioProvider = Provider<Dio>((ref) {
     ),
   );
 
-  if (!config.environment.isProduction) {
+  if (featureFlags.isNetworkLoggingAvailable(config)) {
     dio.interceptors.add(
       LogInterceptor(logPrint: (object) => debugPrint('$object')),
     );

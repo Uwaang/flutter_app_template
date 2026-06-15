@@ -104,12 +104,24 @@ Examples:
 The project uses a simple feature-first layout:
 
 - `lib/app`: app shell, router, theme, and configuration
-- `lib/core`: reusable infrastructure and widgets
+- `lib/core`: reusable error/result, logging, storage, network, and widget foundations
 - `lib/features`: app-facing feature code
 - `assets`: static project assets
 - `test` and `integration_test`: automated tests
 
 The current structure guide is in [docs/project-structure.md](docs/project-structure.md).
+
+## Common app-core foundation
+
+The template includes lightweight app-agnostic foundations for common future app work:
+
+- `core/error`: `Result`, `AppException`, and `AppFailure` for consistent low-level error to user-facing failure mapping
+- `core/logging`: `AppLogger` and replaceable log sinks, with debug console logging by default
+- `core/storage`: a key-value store interface plus a `shared_preferences` implementation for non-sensitive preferences
+- `app/config/feature_flags.dart`: `ENABLE_DEBUG_MENU`, `ENABLE_MOCK_API`, and `ENABLE_NETWORK_LOGGING`
+- `features/settings`, `features/about`, and gated `features/debug` routes
+
+Keep secure storage, crash reporting, analytics, auth, databases, cameras, OpenCV, ONNX, and similar app-specific modules as follow-up additions rather than baseline dependencies.
 
 ## Validation and CI
 

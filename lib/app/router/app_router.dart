@@ -4,17 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flutter_app_template/app/config/app_config.dart';
+import 'package:flutter_app_template/app/config/feature_flags.dart';
+import 'package:flutter_app_template/features/about/presentation/about_screen.dart';
+import 'package:flutter_app_template/features/debug/presentation/debug_screen.dart';
 import 'package:flutter_app_template/features/home/presentation/home_screen.dart';
 import 'package:flutter_app_template/features/settings/presentation/settings_screen.dart';
 
 abstract final class AppRoutePaths {
   static const home = '/';
   static const settings = '/settings';
+  static const about = '/about';
+  static const debug = '/debug';
 }
 
 abstract final class AppRouteNames {
   static const home = 'home';
   static const settings = 'settings';
+  static const about = 'about';
+  static const debug = 'debug';
 }
 
 typedef AppRedirect =
@@ -23,16 +31,31 @@ typedef AppRedirect =
 final appRedirectProvider = Provider<AppRedirect?>((ref) => null);
 
 final appRouterProvider = Provider<GoRouter>(
-  (ref) => createAppRouter(redirect: ref.watch(appRedirectProvider)),
+  (ref) => createAppRouter(
+    redirect: ref.watch(appRedirectProvider),
+    config: ref.watch(appConfigProvider),
+    featureFlags: ref.watch(featureFlagsProvider),
+  ),
 );
 
 GoRouter createAppRouter({
   AppRedirect? redirect,
+  AppConfig? config,
+  FeatureFlags? featureFlags,
   String initialLocation = '/',
 }) {
   return GoRouter(
     initialLocation: initialLocation,
-    redirect: redirect,
+    redirect: (context, state) async {
+      if (state.uri.path == AppRoutePaths.debug &&
+          config != null &&
+          featureFlags != null &&
+          !featureFlags.isDebugMenuAvailable(config)) {
+        return AppRoutePaths.settings;
+      }
+
+      return redirect?.call(context, state);
+    },
     routes: [
       GoRoute(
         path: AppRoutePaths.home,
@@ -43,6 +66,16 @@ GoRouter createAppRouter({
         path: AppRoutePaths.settings,
         name: AppRouteNames.settings,
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutePaths.about,
+        name: AppRouteNames.about,
+        builder: (context, state) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: AppRoutePaths.debug,
+        name: AppRouteNames.debug,
+        builder: (context, state) => const DebugScreen(),
       ),
     ],
     errorBuilder: (context, state) => UnknownRouteScreen(uri: state.uri),

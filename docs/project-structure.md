@@ -9,7 +9,7 @@ This repository uses a feature-first structure that stays close to normal Flutte
 - `lib/app`
   - App bootstrap, configuration, theme, and routing
 - `lib/core`
-  - Shared infrastructure used across features
+  - Shared app-agnostic infrastructure used across features
 - `lib/features`
   - Feature-facing UI and application code
 - `assets`
@@ -31,8 +31,18 @@ This repository uses a feature-first structure that stays close to normal Flutte
   - Theme and color system
 - `lib/core/network`
   - Shared HTTP client configuration
+- `lib/core/error`
+  - `Result`, `AppException`, and `AppFailure` for consistent failure mapping
+- `lib/core/logging`
+  - Logger abstraction and replaceable sinks
+- `lib/core/storage`
+  - Key-value store abstraction and SharedPreferences adapter
 - `lib/core/widgets`
   - Reusable UI building blocks
+- `lib/features/about`
+  - App metadata and project-link placeholders
+- `lib/features/debug`
+  - Feature-flagged runtime diagnostics
 - `lib/features/home`
   - Starter home feature
 - `lib/features/settings`

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flutter_app_template/app/config/app_config.dart';
+import 'package:flutter_app_template/app/config/feature_flags.dart';
+import 'package:flutter_app_template/app/router/app_router.dart';
 import 'package:flutter_app_template/core/widgets/info_tile.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -10,6 +13,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final config = ref.watch(appConfigProvider);
+    final flags = ref.watch(featureFlagsProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -44,6 +48,33 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: 24),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Preferences', style: theme.textTheme.titleLarge),
+                  const SizedBox(height: 12),
+                  InfoTile(label: 'Theme', value: 'System default'),
+                  InfoTile(label: 'Cache', value: 'App-managed'),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Connect these placeholders to project-specific preferences when the app needs them.',
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (flags.isDebugMenuAvailable(config)) ...[
+            const SizedBox(height: 24),
+            FilledButton.icon(
+              onPressed: () => context.go(AppRoutePaths.debug),
+              icon: const Icon(Icons.bug_report_outlined),
+              label: const Text('Open debug menu'),
+            ),
+          ],
           const SizedBox(height: 24),
           Card(
             child: Padding(

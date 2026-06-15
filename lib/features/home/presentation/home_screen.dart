@@ -27,6 +27,11 @@ class HomeScreen extends ConsumerWidget {
             icon: const Icon(Icons.tune),
             label: const Text('Template guide'),
           ),
+          TextButton.icon(
+            onPressed: () => context.go(AppRoutePaths.about),
+            icon: const Icon(Icons.info_outline),
+            label: const Text('About'),
+          ),
         ],
       ),
       body: ListView(

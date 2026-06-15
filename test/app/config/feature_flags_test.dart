@@ -1,0 +1,33 @@
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:flutter_app_template/app/config/app_config.dart';
+import 'package:flutter_app_template/app/config/app_environment.dart';
+import 'package:flutter_app_template/app/config/feature_flags.dart';
+
+void main() {
+  test('default feature flags are disabled', () {
+    final flags = FeatureFlags.fromEnvironment();
+
+    expect(flags.enableDebugMenu, isFalse);
+    expect(flags.enableMockApi, isFalse);
+    expect(flags.enableNetworkLogging, isFalse);
+  });
+
+  test('network logging is unavailable in production even when enabled', () {
+    const flags = FeatureFlags(
+      enableDebugMenu: true,
+      enableMockApi: false,
+      enableNetworkLogging: true,
+    );
+    const config = AppConfig(
+      appName: 'Client App',
+      brandName: 'Client Brand',
+      applicationId: 'com.example.client',
+      apiBaseUrl: 'https://api.client.example',
+      environment: AppEnvironment.prod,
+    );
+
+    expect(flags.isDebugMenuAvailable(config), isTrue);
+    expect(flags.isNetworkLoggingAvailable(config), isFalse);
+  });
+}
