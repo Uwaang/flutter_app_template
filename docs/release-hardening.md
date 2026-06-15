@@ -100,6 +100,14 @@ Artifact names:
 
 This is the preferred full release validation path for a public mirror or public template repository.
 
+If a repository setting or GitHub-side event issue prevents a tag push from enqueueing the workflow, run the same release workflow manually:
+
+```bash
+gh workflow run release.yml --repo OWNER/REPOSITORY --ref vX.Y.Z
+```
+
+Confirm the run completes and the web/AAB artifacts are present before treating the tag as validated.
+
 ## Self-hosted GitLab release artifacts
 
 Tag pipelines matching `v*.*.*` publish:

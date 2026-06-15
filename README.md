@@ -114,7 +114,7 @@ The current structure guide is in [docs/project-structure.md](docs/project-struc
 ## Validation and CI
 
 - GitHub Actions validates formatting, analysis, tests, code generation, and a web smoke build
-- GitHub Actions release workflow builds web and Android AAB artifacts on version tags
+- GitHub Actions release workflow builds web and Android AAB artifacts on version tags or manual dispatch
 - GitLab CI validates the same Flutter workflow on a self-hosted runner and keeps Android AAB artifact builds manual by default
 - Codemagic configuration is present, but remote builds require an externally reachable repository mirror and a Codemagic account
 

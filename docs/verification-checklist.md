@@ -46,6 +46,8 @@ For public release validation, confirm that `.github/workflows/release.yml` pass
 - web artifact upload
 - AAB artifact upload
 
+If the tag push does not create an Actions run, dispatch the workflow manually against the same tag with `gh workflow run release.yml --ref vX.Y.Z` and record the run URL.
+
 ## GitLab CI baseline
 
 Confirm that `.gitlab-ci.yml` passes on the project runner:
