@@ -155,6 +155,18 @@ For Windows-first customization, start with the dry-run generator:
 
 Review the planned file edits, then re-run with `-Apply` to write the changes.
 
+After applying, run the placeholder verification script with the expected app values:
+
+```powershell
+./scripts/verify-template-placeholders.ps1 `
+  -ExpectedAppName "Client App" `
+  -ExpectedBrandName "Client Brand" `
+  -ExpectedApplicationId "com.example.client" `
+  -ExpectedApiBaseUrl "https://api.client.example" `
+  -ExpectedPackageName "client_app" `
+  -ExpectedBinaryName "client_app"
+```
+
 After applying the generator, stabilize dependencies and run the Docker CI target:
 
 ```powershell

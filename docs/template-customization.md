@@ -12,7 +12,30 @@ On Windows, use [`scripts/new_app.ps1`](../scripts/new_app.ps1) to apply the com
   -ApiBaseUrl "https://api.client.example"
 ```
 
-After applying replacements, run `flutter pub get` through the local Docker workflow and commit any resulting `pubspec.lock` change before using the full CI target.
+Review the dry-run output before applying. It should list each file that would be edited or moved, including Dart imports, platform metadata, web metadata, and release configuration placeholders.
+
+```powershell
+./scripts/new_app.ps1 `
+  -AppName "Client App" `
+  -BrandName "Client Brand" `
+  -ApplicationId "com.example.client" `
+  -ApiBaseUrl "https://api.client.example" `
+  -Apply
+```
+
+After applying replacements, run the placeholder verification command before using the full CI target.
+
+```powershell
+./scripts/verify-template-placeholders.ps1 `
+  -ExpectedAppName "Client App" `
+  -ExpectedBrandName "Client Brand" `
+  -ExpectedApplicationId "com.example.client" `
+  -ExpectedApiBaseUrl "https://api.client.example" `
+  -ExpectedPackageName "client_app" `
+  -ExpectedBinaryName "client_app"
+```
+
+Then run `flutter pub get` through the local Docker workflow and commit any resulting `pubspec.lock` change before using the full CI target.
 
 ## 1. Update compile-time configuration
 
@@ -46,6 +69,7 @@ Recommended values to replace first:
 
 ## 4. Confirm the build workflow
 
+- Run [`scripts/verify-template-placeholders.ps1`](../scripts/verify-template-placeholders.ps1) with the expected app values
 - Run the local verification checklist in [`docs/verification-checklist.md`](./verification-checklist.md)
 - Confirm `pubspec.lock` is stable after dependency resolution
 - Confirm GitHub Actions passes

@@ -75,6 +75,11 @@ if (-not $Description) {
 
 $companyName = ($ApplicationId -split '\.')[0..([Math]::Max(0, ($ApplicationId -split '\.').Length - 2))] -join '.'
 
+$oldAndroidPackagePath = 'android/app/src/main/kotlin/com/example/template/flutter_app_template'
+$newAndroidPackagePath = Join-Path 'android/app/src/main/kotlin' (Convert-ApplicationIdToPath -Value $ApplicationId)
+$oldMainActivity = Join-Path $oldAndroidPackagePath 'MainActivity.kt'
+$newMainActivity = Join-Path $newAndroidPackagePath 'MainActivity.kt'
+
 $old = @{
     AppName = 'Template App'
     BrandName = 'Template Brand'
@@ -83,11 +88,13 @@ $old = @{
     PackageName = 'flutter_app_template'
     BinaryName = 'template_app'
     CompanyName = 'com.example.template'
+    AndroidPackagePath = $oldAndroidPackagePath
     WebDescription = 'Template App is a Docker-first Flutter boilerplate for new projects.'
 }
 
 $replacements = [ordered]@{
     $old.WebDescription = $Description
+    $old.AndroidPackagePath = (Get-RelativePath -Path $newAndroidPackagePath)
     $old.AppName = $AppName
     $old.BrandName = $BrandName
     $old.ApplicationId = $ApplicationId
@@ -97,11 +104,6 @@ $replacements = [ordered]@{
     $old.CompanyName = $companyName
 }
 
-$oldAndroidPackagePath = 'android/app/src/main/kotlin/com/example/template/flutter_app_template'
-$newAndroidPackagePath = Join-Path 'android/app/src/main/kotlin' (Convert-ApplicationIdToPath -Value $ApplicationId)
-$oldMainActivity = Join-Path $oldAndroidPackagePath 'MainActivity.kt'
-$newMainActivity = Join-Path $newAndroidPackagePath 'MainActivity.kt'
-
 $trackedFiles = & git ls-files
 if ($LASTEXITCODE -ne 0) {
     throw 'git ls-files failed. Run this script from a git checkout.'
@@ -109,7 +111,8 @@ if ($LASTEXITCODE -ne 0) {
 
 $excludedPrefixes = @(
     'docs/reference/',
-    'scripts/new_app.ps1'
+    'scripts/new_app.ps1',
+    'scripts/verify-template-placeholders.ps1'
 )
 
 $candidateFiles = foreach ($file in $trackedFiles) {
@@ -214,4 +217,8 @@ if ($changes.Count -eq 0) {
 if (-not $Apply) {
     Write-Host ''
     Write-Host 'No files were changed. Re-run with -Apply to write these changes.'
+} else {
+    Write-Host ''
+    Write-Host 'Next verification command:'
+    Write-Host ("./scripts/verify-template-placeholders.ps1 -ExpectedAppName ""{0}"" -ExpectedBrandName ""{1}"" -ExpectedApplicationId ""{2}"" -ExpectedApiBaseUrl ""{3}"" -ExpectedPackageName ""{4}"" -ExpectedBinaryName ""{5}""" -f $AppName, $BrandName, $ApplicationId, $ApiBaseUrl, $PackageName, $BinaryName)
 }
