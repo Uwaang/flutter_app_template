@@ -30,13 +30,13 @@ switch ($Task) {
     'ci' {
         & docker @dockerArgs dart format --output=none --set-exit-if-changed .
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-        & docker @dockerArgs flutter analyze
-        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-        & docker @dockerArgs flutter test
-        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         & docker @dockerArgs dart run build_runner build
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         & git diff --exit-code
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        & docker @dockerArgs flutter analyze
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        & docker @dockerArgs flutter test
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         & docker @dockerArgs flutter build web --release @flutterDefines @ExtraArgs
     }

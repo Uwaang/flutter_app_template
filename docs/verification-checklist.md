@@ -33,10 +33,10 @@ make build-aab
 Confirm that `.github/workflows/ci.yml` passes:
 
 - format check
-- `flutter analyze`
-- `flutter test`
 - code generation
 - generated diff check
+- `flutter analyze`
+- `flutter test`
 - web smoke build
 
 For public release validation, confirm that `.github/workflows/release.yml` passes on a version tag:
@@ -54,10 +54,11 @@ Confirm that `.gitlab-ci.yml` passes on the project runner:
 
 - Flutter image boot
 - dependency resolution
-- analysis
-- tests
+- format check
 - code generation
 - generated diff check
+- analysis
+- tests
 - release web build
 - manual release AAB build only when the runner is intentionally selected for that heavier job
 

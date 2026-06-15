@@ -120,6 +120,8 @@ The current structure guide is in [docs/project-structure.md](docs/project-struc
 
 The verification checklist lives in [docs/verification-checklist.md](docs/verification-checklist.md).
 
+The CI path is intentionally ordered as format check, code generation, generated diff check, analysis, tests, then web smoke build. This catches stale generated files before analyzer and test failures obscure the source of drift.
+
 ## Android release baseline
 
 - Debug and release APK builds are supported
