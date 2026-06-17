@@ -22,9 +22,11 @@ This repository uses a feature-first structure that stays close to normal Flutte
 ## Current layout
 
 - `lib/app/bootstrap`
-  - Application startup and provider setup
+  - Application startup, ordered startup tasks, global error routing, startup diagnostics, and provider setup
 - `lib/app/config`
   - Compile-time values and typed app configuration
+- `lib/app/lifecycle`
+  - App lifecycle dispatch hooks and default lifecycle logging
 - `lib/app/router`
   - Route definitions and navigation setup
 - `lib/app/theme`
