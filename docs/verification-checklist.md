@@ -41,6 +41,8 @@ Confirm that `.github/workflows/ci.yml` passes:
 
 Bootstrap-related changes should also keep the startup task tests, global error reporter tests, lifecycle hook tests, and stable widget tests passing without adding crash-reporting or platform-service dependencies.
 
+The current `build_runner` command is `dart run build_runner build`. The old `--delete-conflicting-outputs` option has been removed upstream and is ignored when passed, so this template intentionally detects generated-output drift with `git diff --exit-code` immediately after generation.
+
 For public release validation, confirm that `.github/workflows/release.yml` passes on a version tag:
 
 - release preflight

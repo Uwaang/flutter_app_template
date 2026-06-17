@@ -13,7 +13,7 @@ void main() {
     expect(flags.enableNetworkLogging, isFalse);
   });
 
-  test('network logging is unavailable in production even when enabled', () {
+  test('debug menu and network logging are unavailable in production', () {
     const flags = FeatureFlags(
       enableDebugMenu: true,
       enableMockApi: false,
@@ -27,7 +27,24 @@ void main() {
       environment: AppEnvironment.prod,
     );
 
-    expect(flags.isDebugMenuAvailable(config), isTrue);
+    expect(flags.isDebugMenuAvailable(config), isFalse);
     expect(flags.isNetworkLoggingAvailable(config), isFalse);
+  });
+
+  test('debug menu can be enabled outside production', () {
+    const flags = FeatureFlags(
+      enableDebugMenu: true,
+      enableMockApi: false,
+      enableNetworkLogging: false,
+    );
+    const config = AppConfig(
+      appName: 'Client App',
+      brandName: 'Client Brand',
+      applicationId: 'com.example.client',
+      apiBaseUrl: 'https://api.client.example',
+      environment: AppEnvironment.stage,
+    );
+
+    expect(flags.isDebugMenuAvailable(config), isTrue);
   });
 }

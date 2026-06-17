@@ -119,11 +119,13 @@ The template includes lightweight app-agnostic foundations for common future app
 - `app/lifecycle`: app lifecycle hooks that log state changes and can be extended for future autosave, sync, cache, or resource management
 - `core/error`: `Result`, `AppException`, and `AppFailure` for consistent low-level error to user-facing failure mapping
 - `core/logging`: `AppLogger` and replaceable log sinks, with debug console logging by default
-- `core/storage`: a key-value store interface plus a `shared_preferences` implementation for non-sensitive preferences
+- `core/storage`: a key-value store interface plus a `shared_preferences` implementation for non-sensitive preferences only
 - `app/config/feature_flags.dart`: `ENABLE_DEBUG_MENU`, `ENABLE_MOCK_API`, and `ENABLE_NETWORK_LOGGING`
 - `features/settings`, `features/about`, and gated `features/debug` routes
 
-Keep secure storage, crash reporting, analytics, auth, databases, cameras, OpenCV, ONNX, and similar app-specific modules as follow-up additions rather than baseline dependencies.
+`ENABLE_DEBUG_MENU` is intentionally ignored in production. Debug UI is available only when the flag is enabled and `APP_ENV` is not `prod` or `production`.
+
+Do not store secrets, tokens, credentials, or personal data in the `shared_preferences` store. Add secure storage later as an explicit app-specific follow-up when a real app needs it. Keep secure storage, crash reporting, analytics, auth, databases, cameras, OpenCV, ONNX, and similar modules as follow-up additions rather than baseline dependencies.
 
 The bootstrap pipeline keeps the default startup work intentionally small: prepare the logger, validate compile-time configuration, capture task timing, then run the app inside the shared Riverpod container. The debug screen surfaces the latest startup summary when the debug route is available.
 
@@ -138,6 +140,12 @@ The bootstrap pipeline keeps the default startup work intentionally small: prepa
 The verification checklist lives in [docs/verification-checklist.md](docs/verification-checklist.md).
 
 The CI path is intentionally ordered as format check, code generation, generated diff check, analysis, tests, then web smoke build. This catches stale generated files before analyzer and test failures obscure the source of drift.
+
+Current `build_runner` no longer supports `--delete-conflicting-outputs`; if that option is passed, it is reported as removed and ignored. The template therefore runs `dart run build_runner build` and relies on the generated diff check to fail when committed generated files drift.
+
+## Codex-assisted change workflow
+
+For future Codex-assisted changes, create a branch from `main`, commit the change there, push the branch, and open a pull request for review. Do not push directly to `main`. Keep `main` as the stable baseline and merge only after local validation and GitHub checks pass.
 
 ## Android release baseline
 
