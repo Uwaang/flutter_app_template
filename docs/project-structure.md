@@ -36,7 +36,7 @@ This repository uses a feature-first structure that stays close to normal Flutte
 - `lib/core/logging`
   - Logger abstraction and replaceable sinks
 - `lib/core/storage`
-  - Key-value store abstraction and SharedPreferences adapter
+  - Key-value store abstraction and SharedPreferences adapter for non-sensitive preferences only
 - `lib/core/widgets`
   - Reusable UI building blocks
 - `lib/features/about`
@@ -53,6 +53,7 @@ This repository uses a feature-first structure that stays close to normal Flutte
 - Put app-wide concerns in `lib/app`
 - Put reusable infrastructure in `lib/core`
 - Put user-facing flows in `lib/features`
+- Do not store secrets, tokens, credentials, or personal data in SharedPreferences; add secure storage later only when a real app requires it
 - Avoid introducing a package split until repeated cross-repository maintenance becomes real
 
 ## Why this structure
