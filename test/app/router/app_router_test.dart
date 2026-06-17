@@ -18,6 +18,13 @@ void main() {
     apiBaseUrl: 'https://api.client.example',
     environment: AppEnvironment.ci,
   );
+  const productionConfig = AppConfig(
+    appName: 'Client App',
+    brandName: 'Client Brand',
+    applicationId: 'com.example.client',
+    apiBaseUrl: 'https://api.client.example',
+    environment: AppEnvironment.prod,
+  );
 
   test('centralizes route paths and names', () {
     expect(AppRoutePaths.home, '/');
@@ -99,6 +106,26 @@ void main() {
 
     expect(find.text('Debug'), findsOneWidget);
     expect(find.text('Feature flags'), findsOneWidget);
+  });
+
+  testWidgets('redirects the debug route in production even when enabled', (
+    tester,
+  ) async {
+    final router = createAppRouter(
+      initialLocation: AppRoutePaths.debug,
+      config: productionConfig,
+      featureFlags: const FeatureFlags(
+        enableDebugMenu: true,
+        enableMockApi: false,
+        enableNetworkLogging: false,
+      ),
+    );
+
+    await tester.pumpWidget(_TestRouterApp(router: router));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Compile-time configuration'), findsOneWidget);
+    expect(find.text('Debug'), findsNothing);
   });
 
   testWidgets('renders a clear fallback for unknown routes', (tester) async {

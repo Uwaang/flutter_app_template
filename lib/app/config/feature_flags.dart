@@ -22,7 +22,7 @@ class FeatureFlags {
   final bool enableNetworkLogging;
 
   bool isDebugMenuAvailable(AppConfig config) {
-    return enableDebugMenu;
+    return enableDebugMenu && !config.environment.isProduction;
   }
 
   bool isNetworkLoggingAvailable(AppConfig config) {
