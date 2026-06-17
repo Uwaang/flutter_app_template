@@ -78,6 +78,7 @@ void main() {
         enableDebugMenu: false,
         enableMockApi: false,
         enableNetworkLogging: false,
+        enableProviderLogging: false,
       ),
     );
 
@@ -98,6 +99,7 @@ void main() {
         enableDebugMenu: true,
         enableMockApi: false,
         enableNetworkLogging: false,
+        enableProviderLogging: false,
       ),
     );
 
@@ -118,6 +120,7 @@ void main() {
         enableDebugMenu: true,
         enableMockApi: false,
         enableNetworkLogging: false,
+        enableProviderLogging: false,
       ),
     );
 

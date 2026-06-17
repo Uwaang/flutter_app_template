@@ -25,6 +25,8 @@ This repository uses a feature-first structure that stays close to normal Flutte
   - Application startup, ordered startup tasks, global error routing, startup diagnostics, and provider setup
 - `lib/app/config`
   - Compile-time values and typed app configuration
+- `lib/app/diagnostics`
+  - Riverpod provider observer diagnostics and safe provider failure logging
 - `lib/app/lifecycle`
   - App lifecycle dispatch hooks and default lifecycle logging
 - `lib/app/router`
@@ -56,6 +58,7 @@ This repository uses a feature-first structure that stays close to normal Flutte
 - Put reusable infrastructure in `lib/core`
 - Put user-facing flows in `lib/features`
 - Do not store secrets, tokens, credentials, or personal data in SharedPreferences; add secure storage later only when a real app requires it
+- Do not log provider values through diagnostics; record safe provider names, types, event counts, and errors only
 - Avoid introducing a package split until repeated cross-repository maintenance becomes real
 
 ## Why this structure
