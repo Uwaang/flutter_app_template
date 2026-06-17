@@ -115,6 +115,8 @@ The current structure guide is in [docs/project-structure.md](docs/project-struc
 
 The template includes lightweight app-agnostic foundations for common future app work:
 
+- `app/bootstrap`: ordered startup tasks, startup timing diagnostics, and global Flutter/platform/zone error routing through `AppLogger`
+- `app/lifecycle`: app lifecycle hooks that log state changes and can be extended for future autosave, sync, cache, or resource management
 - `core/error`: `Result`, `AppException`, and `AppFailure` for consistent low-level error to user-facing failure mapping
 - `core/logging`: `AppLogger` and replaceable log sinks, with debug console logging by default
 - `core/storage`: a key-value store interface plus a `shared_preferences` implementation for non-sensitive preferences
@@ -122,6 +124,8 @@ The template includes lightweight app-agnostic foundations for common future app
 - `features/settings`, `features/about`, and gated `features/debug` routes
 
 Keep secure storage, crash reporting, analytics, auth, databases, cameras, OpenCV, ONNX, and similar app-specific modules as follow-up additions rather than baseline dependencies.
+
+The bootstrap pipeline keeps the default startup work intentionally small: prepare the logger, validate compile-time configuration, capture task timing, then run the app inside the shared Riverpod container. The debug screen surfaces the latest startup summary when the debug route is available.
 
 ## Validation and CI
 

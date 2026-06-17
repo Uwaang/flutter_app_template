@@ -39,6 +39,8 @@ Confirm that `.github/workflows/ci.yml` passes:
 - `flutter test`
 - web smoke build
 
+Bootstrap-related changes should also keep the startup task tests, global error reporter tests, lifecycle hook tests, and stable widget tests passing without adding crash-reporting or platform-service dependencies.
+
 For public release validation, confirm that `.github/workflows/release.yml` passes on a version tag:
 
 - release preflight
