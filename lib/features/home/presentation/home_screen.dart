@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:flutter_app_template/app/config/app_config.dart';
 import 'package:flutter_app_template/app/router/app_router.dart';
+import 'package:flutter_app_template/app/theme/app_radius.dart';
+import 'package:flutter_app_template/app/theme/app_spacing.dart';
 import 'package:flutter_app_template/core/network/api_client.dart';
 import 'package:flutter_app_template/core/widgets/info_tile.dart';
 import 'package:flutter_app_template/features/home/application/template_manifest_provider.dart';
@@ -35,11 +37,11 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: AppSpacing.screen,
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: AppRadius.hero,
               gradient: LinearGradient(
                 colors: [
                   theme.colorScheme.primaryContainer,
@@ -47,27 +49,27 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            padding: const EdgeInsets.all(24),
+            padding: AppSpacing.card,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(config.brandName, style: theme.textTheme.labelLarge),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   'Ship the next Flutter app without rebuilding the plumbing.',
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   'This repository is the starter template for Android, Web, Linux, and Windows projects.',
                   style: theme.textTheme.bodyLarge,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppSpacing.md),
                 Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
                   children: manifest.supportedPlatforms
                       .map((platform) => Chip(label: Text(platform)))
                       .toList(),
@@ -75,15 +77,15 @@ class HomeScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.lg),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: AppSpacing.card,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Template defaults', style: theme.textTheme.titleLarge),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.sm),
                   InfoTile(label: 'App name', value: manifest.appName),
                   InfoTile(label: 'Brand name', value: manifest.brandName),
                   InfoTile(label: 'Package', value: manifest.packageName),
@@ -93,10 +95,10 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.lg),
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: AppSpacing.card,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -104,7 +106,7 @@ class HomeScreen extends ConsumerWidget {
                     'Template setup checklist',
                     style: theme.textTheme.titleLarge,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.sm),
                   for (final item in manifest.nextSteps)
                     ListTile(
                       contentPadding: EdgeInsets.zero,

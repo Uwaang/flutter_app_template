@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_app_template/app/theme/app_spacing.dart';
+
 class InfoTile extends StatelessWidget {
   const InfoTile({required this.label, required this.value, super.key});
 
@@ -11,7 +13,7 @@ class InfoTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -24,7 +26,7 @@ class InfoTile extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             flex: 3,
             child: Text(value, style: theme.textTheme.bodyLarge),

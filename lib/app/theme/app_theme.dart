@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_app_template/app/theme/app_radius.dart';
+import 'package:flutter_app_template/app/theme/app_spacing.dart';
+
 abstract final class AppTheme {
   static ThemeData buildTheme() {
     const seedColor = Color(0xFF0F766E);
@@ -21,7 +24,7 @@ abstract final class AppTheme {
         color: Colors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: AppRadius.large,
           side: BorderSide(color: colorScheme.outlineVariant),
         ),
       ),
@@ -30,7 +33,10 @@ abstract final class AppTheme {
         disabledColor: colorScheme.surfaceContainerHighest,
         selectedColor: colorScheme.primaryContainer,
         secondarySelectedColor: colorScheme.secondaryContainer,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xs,
+        ),
         labelStyle: TextStyle(color: colorScheme.onSecondaryContainer),
         secondaryLabelStyle: TextStyle(color: colorScheme.onPrimaryContainer),
         brightness: Brightness.light,
