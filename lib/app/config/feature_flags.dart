@@ -7,6 +7,7 @@ class FeatureFlags {
     required this.enableDebugMenu,
     required this.enableMockApi,
     required this.enableNetworkLogging,
+    required this.enableProviderLogging,
   });
 
   factory FeatureFlags.fromEnvironment() {
@@ -14,12 +15,14 @@ class FeatureFlags {
       enableDebugMenu: bool.fromEnvironment('ENABLE_DEBUG_MENU'),
       enableMockApi: bool.fromEnvironment('ENABLE_MOCK_API'),
       enableNetworkLogging: bool.fromEnvironment('ENABLE_NETWORK_LOGGING'),
+      enableProviderLogging: bool.fromEnvironment('ENABLE_PROVIDER_LOGGING'),
     );
   }
 
   final bool enableDebugMenu;
   final bool enableMockApi;
   final bool enableNetworkLogging;
+  final bool enableProviderLogging;
 
   bool isDebugMenuAvailable(AppConfig config) {
     return enableDebugMenu && !config.environment.isProduction;
@@ -27,6 +30,10 @@ class FeatureFlags {
 
   bool isNetworkLoggingAvailable(AppConfig config) {
     return enableNetworkLogging && !config.environment.isProduction;
+  }
+
+  bool isProviderLifecycleLoggingAvailable(AppConfig config) {
+    return enableProviderLogging && !config.environment.isProduction;
   }
 }
 

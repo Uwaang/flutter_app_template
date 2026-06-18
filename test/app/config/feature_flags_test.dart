@@ -11,31 +11,38 @@ void main() {
     expect(flags.enableDebugMenu, isFalse);
     expect(flags.enableMockApi, isFalse);
     expect(flags.enableNetworkLogging, isFalse);
+    expect(flags.enableProviderLogging, isFalse);
   });
 
-  test('debug menu and network logging are unavailable in production', () {
-    const flags = FeatureFlags(
-      enableDebugMenu: true,
-      enableMockApi: false,
-      enableNetworkLogging: true,
-    );
-    const config = AppConfig(
-      appName: 'Client App',
-      brandName: 'Client Brand',
-      applicationId: 'com.example.client',
-      apiBaseUrl: 'https://api.client.example',
-      environment: AppEnvironment.prod,
-    );
+  test(
+    'debug menu, network logging, and provider logging are unavailable in production',
+    () {
+      const flags = FeatureFlags(
+        enableDebugMenu: true,
+        enableMockApi: false,
+        enableNetworkLogging: true,
+        enableProviderLogging: true,
+      );
+      const config = AppConfig(
+        appName: 'Client App',
+        brandName: 'Client Brand',
+        applicationId: 'com.example.client',
+        apiBaseUrl: 'https://api.client.example',
+        environment: AppEnvironment.prod,
+      );
 
-    expect(flags.isDebugMenuAvailable(config), isFalse);
-    expect(flags.isNetworkLoggingAvailable(config), isFalse);
-  });
+      expect(flags.isDebugMenuAvailable(config), isFalse);
+      expect(flags.isNetworkLoggingAvailable(config), isFalse);
+      expect(flags.isProviderLifecycleLoggingAvailable(config), isFalse);
+    },
+  );
 
-  test('debug menu can be enabled outside production', () {
+  test('debug menu and provider logging can be enabled outside production', () {
     const flags = FeatureFlags(
       enableDebugMenu: true,
       enableMockApi: false,
       enableNetworkLogging: false,
+      enableProviderLogging: true,
     );
     const config = AppConfig(
       appName: 'Client App',
@@ -46,5 +53,6 @@ void main() {
     );
 
     expect(flags.isDebugMenuAvailable(config), isTrue);
+    expect(flags.isProviderLifecycleLoggingAvailable(config), isTrue);
   });
 }

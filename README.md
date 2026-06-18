@@ -116,18 +116,21 @@ The current structure guide is in [docs/project-structure.md](docs/project-struc
 The template includes lightweight app-agnostic foundations for common future app work:
 
 - `app/bootstrap`: ordered startup tasks, startup timing diagnostics, and global Flutter/platform/zone error routing through `AppLogger`
+- `app/diagnostics`: safe Riverpod provider observer diagnostics for provider lifecycle counts and provider failures
 - `app/lifecycle`: app lifecycle hooks that log state changes and can be extended for future autosave, sync, cache, or resource management
 - `core/error`: `Result`, `AppException`, and `AppFailure` for consistent low-level error to user-facing failure mapping
 - `core/logging`: `AppLogger` and replaceable log sinks, with debug console logging by default
 - `core/storage`: a key-value store interface plus a `shared_preferences` implementation for non-sensitive preferences only
-- `app/config/feature_flags.dart`: `ENABLE_DEBUG_MENU`, `ENABLE_MOCK_API`, and `ENABLE_NETWORK_LOGGING`
+- `app/config/feature_flags.dart`: `ENABLE_DEBUG_MENU`, `ENABLE_MOCK_API`, `ENABLE_NETWORK_LOGGING`, and `ENABLE_PROVIDER_LOGGING`
 - `features/settings`, `features/about`, and gated `features/debug` routes
 
 `ENABLE_DEBUG_MENU` is intentionally ignored in production. Debug UI is available only when the flag is enabled and `APP_ENV` is not `prod` or `production`.
 
+`ENABLE_PROVIDER_LOGGING` enables noisy Riverpod provider add, update, and dispose diagnostics only outside production. Provider failures are always routed through `AppLogger`, but provider values are never logged or displayed.
+
 Do not store secrets, tokens, credentials, or personal data in the `shared_preferences` store. Add secure storage later as an explicit app-specific follow-up when a real app needs it. Keep secure storage, crash reporting, analytics, auth, databases, cameras, OpenCV, ONNX, and similar modules as follow-up additions rather than baseline dependencies.
 
-The bootstrap pipeline keeps the default startup work intentionally small: prepare the logger, validate compile-time configuration, capture task timing, then run the app inside the shared Riverpod container. The debug screen surfaces the latest startup summary when the debug route is available.
+The bootstrap pipeline keeps the default startup work intentionally small: prepare the logger, validate compile-time configuration, configure safe provider diagnostics, capture task timing, then run the app inside the shared Riverpod container. The debug screen surfaces the latest startup and provider diagnostics summaries when the debug route is available.
 
 ## Validation and CI
 

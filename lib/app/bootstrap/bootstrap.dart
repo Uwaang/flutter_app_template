@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_app_template/app/bootstrap/app_error_reporter.dart';
 import 'package:flutter_app_template/app/bootstrap/startup_task.dart';
+import 'package:flutter_app_template/app/diagnostics/provider_diagnostics.dart';
 import 'package:flutter_app_template/app/lifecycle/app_lifecycle.dart';
 import 'package:flutter_app_template/core/logging/app_logger.dart';
 
@@ -19,7 +20,7 @@ Future<void> bootstrap(
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final appContainer = container ?? ProviderContainer();
+  final appContainer = container ?? createAppProviderContainer();
   final logger = appContainer.read(appLoggerProvider);
   final errorReporter = AppErrorReporter(logger: logger);
 
@@ -41,4 +42,20 @@ Future<void> bootstrap(
       UncontrolledProviderScope(container: appContainer, child: builder()),
     );
   }, errorReporter.reportZoneError);
+}
+
+ProviderContainer createAppProviderContainer({
+  AppLogSink logSink = const DebugConsoleLogSink(),
+  ProviderDiagnostics? providerDiagnostics,
+}) {
+  final diagnostics = providerDiagnostics ?? ProviderDiagnostics();
+  final logger = AppLogger(logSink);
+
+  return ProviderContainer(
+    overrides: [
+      appLogSinkProvider.overrideWithValue(logSink),
+      providerDiagnosticsProvider.overrideWithValue(diagnostics),
+    ],
+    observers: [AppProviderObserver(logger: logger, diagnostics: diagnostics)],
+  );
 }

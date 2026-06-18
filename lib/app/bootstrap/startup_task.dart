@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_app_template/app/config/app_config.dart';
+import 'package:flutter_app_template/app/config/feature_flags.dart';
+import 'package:flutter_app_template/app/diagnostics/provider_diagnostics.dart';
 import 'package:flutter_app_template/core/logging/app_logger.dart';
 
 typedef StartupTaskAction =
@@ -49,6 +51,10 @@ final startupDiagnosticsProvider = Provider<StartupDiagnostics>(
 const defaultStartupTasks = <StartupTask>[
   StartupTask(name: 'Prepare app logger', run: _prepareAppLogger),
   StartupTask(name: 'Validate app configuration', run: _validateAppConfig),
+  StartupTask(
+    name: 'Configure provider diagnostics',
+    run: _configureProviderDiagnostics,
+  ),
 ];
 
 Future<StartupSummary> runStartupTasks({
@@ -102,4 +108,11 @@ void _prepareAppLogger(ProviderContainer container) {
 
 void _validateAppConfig(ProviderContainer container) {
   container.read(appConfigProvider);
+}
+
+void _configureProviderDiagnostics(ProviderContainer container) {
+  final config = container.read(appConfigProvider);
+  final flags = container.read(featureFlagsProvider);
+  container.read(providerDiagnosticsProvider).lifecycleLoggingEnabled = flags
+      .isProviderLifecycleLoggingAvailable(config);
 }

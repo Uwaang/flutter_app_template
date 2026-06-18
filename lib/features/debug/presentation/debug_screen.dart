@@ -5,6 +5,7 @@ import 'package:flutter_app_template/app/bootstrap/startup_task.dart';
 import 'package:flutter_app_template/app/config/app_config.dart';
 import 'package:flutter_app_template/app/config/app_metadata.dart';
 import 'package:flutter_app_template/app/config/feature_flags.dart';
+import 'package:flutter_app_template/app/diagnostics/provider_diagnostics.dart';
 import 'package:flutter_app_template/core/widgets/info_tile.dart';
 
 class DebugScreen extends ConsumerWidget {
@@ -16,6 +17,7 @@ class DebugScreen extends ConsumerWidget {
     final flags = ref.watch(featureFlagsProvider);
     final metadata = ref.watch(appMetadataProvider);
     final startupSummary = ref.watch(startupDiagnosticsProvider).latestSummary;
+    final providerDiagnostics = ref.watch(providerDiagnosticsProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -62,6 +64,10 @@ class DebugScreen extends ConsumerWidget {
                     label: 'ENABLE_NETWORK_LOGGING',
                     value: flags.enableNetworkLogging.toString(),
                   ),
+                  InfoTile(
+                    label: 'ENABLE_PROVIDER_LOGGING',
+                    value: flags.enableProviderLogging.toString(),
+                  ),
                 ],
               ),
             ),
@@ -95,6 +101,48 @@ class DebugScreen extends ConsumerWidget {
                         value: '${task.elapsed.inMilliseconds} ms',
                       ),
                   ],
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Provider diagnostics',
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 12),
+                  InfoTile(
+                    label: 'Lifecycle logging',
+                    value: providerDiagnostics.lifecycleLoggingEnabled
+                        .toString(),
+                  ),
+                  InfoTile(
+                    label: 'Added',
+                    value: providerDiagnostics.addedCount.toString(),
+                  ),
+                  InfoTile(
+                    label: 'Updated',
+                    value: providerDiagnostics.updatedCount.toString(),
+                  ),
+                  InfoTile(
+                    label: 'Disposed',
+                    value: providerDiagnostics.disposedCount.toString(),
+                  ),
+                  InfoTile(
+                    label: 'Failed',
+                    value: providerDiagnostics.failedCount.toString(),
+                  ),
+                  for (final event in providerDiagnostics.recentEvents)
+                    InfoTile(
+                      label: event.type.name,
+                      value: '${event.providerName} (${event.providerType})',
+                    ),
                 ],
               ),
             ),
