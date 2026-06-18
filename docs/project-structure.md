@@ -32,7 +32,7 @@ This repository uses a feature-first structure that stays close to normal Flutte
 - `lib/app/router`
   - Route definitions and navigation setup
 - `lib/app/theme`
-  - Theme and color system
+  - Theme, spacing tokens, and radius tokens
 - `lib/core/network`
   - Shared HTTP client configuration
 - `lib/core/error`
@@ -42,7 +42,7 @@ This repository uses a feature-first structure that stays close to normal Flutte
 - `lib/core/storage`
   - Key-value store abstraction and SharedPreferences adapter for non-sensitive preferences only
 - `lib/core/widgets`
-  - Reusable UI building blocks
+  - Reusable UI building blocks and common loading, empty, error, and async-value states
 - `lib/features/about`
   - App metadata and project-link placeholders
 - `lib/features/debug`
@@ -59,6 +59,7 @@ This repository uses a feature-first structure that stays close to normal Flutte
 - Put user-facing flows in `lib/features`
 - Do not store secrets, tokens, credentials, or personal data in SharedPreferences; add secure storage later only when a real app requires it
 - Do not log provider values through diagnostics; record safe provider names, types, event counts, and errors only
+- Keep shared UI widgets app-agnostic; add app-specific branding and workflows in `lib/features`
 - Avoid introducing a package split until repeated cross-repository maintenance becomes real
 
 ## Why this structure

@@ -118,9 +118,11 @@ The template includes lightweight app-agnostic foundations for common future app
 - `app/bootstrap`: ordered startup tasks, startup timing diagnostics, and global Flutter/platform/zone error routing through `AppLogger`
 - `app/diagnostics`: safe Riverpod provider observer diagnostics for provider lifecycle counts and provider failures
 - `app/lifecycle`: app lifecycle hooks that log state changes and can be extended for future autosave, sync, cache, or resource management
+- `app/theme`: lightweight spacing and radius tokens used by shared widgets and template screens
 - `core/error`: `Result`, `AppException`, and `AppFailure` for consistent low-level error to user-facing failure mapping
 - `core/logging`: `AppLogger` and replaceable log sinks, with debug console logging by default
 - `core/storage`: a key-value store interface plus a `shared_preferences` implementation for non-sensitive preferences only
+- `core/widgets`: reusable app-agnostic UI helpers including loading, empty, error, info, and AsyncValue state rendering widgets
 - `app/config/feature_flags.dart`: `ENABLE_DEBUG_MENU`, `ENABLE_MOCK_API`, `ENABLE_NETWORK_LOGGING`, and `ENABLE_PROVIDER_LOGGING`
 - `features/settings`, `features/about`, and gated `features/debug` routes
 
@@ -131,6 +133,8 @@ The template includes lightweight app-agnostic foundations for common future app
 Do not store secrets, tokens, credentials, or personal data in the `shared_preferences` store. Add secure storage later as an explicit app-specific follow-up when a real app needs it. Keep secure storage, crash reporting, analytics, auth, databases, cameras, OpenCV, ONNX, and similar modules as follow-up additions rather than baseline dependencies.
 
 The bootstrap pipeline keeps the default startup work intentionally small: prepare the logger, validate compile-time configuration, configure safe provider diagnostics, capture task timing, then run the app inside the shared Riverpod container. The debug screen surfaces the latest startup and provider diagnostics summaries when the debug route is available.
+
+Common UI states are intentionally quiet and app-agnostic. Use `AppLoadingState`, `AppEmptyState`, `AppErrorState`, and `AsyncValueView` for repeated feature surfaces before introducing app-specific presentation patterns.
 
 ## Validation and CI
 

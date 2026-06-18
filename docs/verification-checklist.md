@@ -43,6 +43,8 @@ Bootstrap-related changes should also keep the startup task tests, global error 
 
 Provider diagnostics changes should keep provider observer tests passing, verify provider errors route through `AppLogger`, and confirm noisy provider lifecycle diagnostics are gated by `ENABLE_PROVIDER_LOGGING` and unavailable in production.
 
+Shared UI changes should keep token tests and common state widget tests passing, verify `AsyncValueView` does not expose raw error details by default, and avoid adding app-specific dependencies or branding.
+
 The current `build_runner` command is `dart run build_runner build`. The old `--delete-conflicting-outputs` option has been removed upstream and is ignored when passed, so this template intentionally detects generated-output drift with `git diff --exit-code` immediately after generation.
 
 For public release validation, confirm that `.github/workflows/release.yml` passes on a version tag:
